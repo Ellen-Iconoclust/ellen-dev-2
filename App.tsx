@@ -1,15 +1,15 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Marquee from './components/Marquee';
-import Projects from './components/Projects';
-import Inspirations from './components/Inspirations';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import CustomCursor from './components/CustomCursor';
-import Background3D from './components/Background3D';
-import Loader from './components/Loader';
+import React, { useState, useEffect } from 'react';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import Marquee from './components/Marquee.tsx';
+import Projects from './components/Projects.tsx';
+import Inspirations from './components/Inspirations.tsx';
+import Contact from './components/Contact.tsx';
+import Footer from './components/Footer.tsx';
+import CustomCursor from './components/CustomCursor.tsx';
+import Background3D from './components/Background3D.tsx';
+import Loader from './components/Loader.tsx';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
@@ -20,7 +20,6 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initial entrance animations
     if (!loading) {
       gsap.to('.reveal-inner', {
         y: 0,
@@ -31,28 +30,24 @@ const App: React.FC = () => {
     }
   }, [loading]);
 
-  // Global scroll function to be used by Navbar and other components
   const scrollToSection = (id: string) => {
+    if (id === 'top') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     const element = document.getElementById(id);
     if (!element) return;
 
-    // Offset for the sticky navbar
-    const offset = 100;
+    const offset = 80; // Standardize offset for sticky header
     const bodyRect = document.body.getBoundingClientRect().top;
     const elementRect = element.getBoundingClientRect().top;
     const elementPosition = elementRect - bodyRect;
     const offsetPosition = elementPosition - offset;
 
-    // Fixed: Standardized scrolling for both mobile and desktop
-    // This ensures that even if ScrollTrigger or other plugins are active, we scroll to the right spot.
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth'
-    });
-
-    // Fallback using GSAP if native smooth scroll is interrupted or needs more control
+    // Use GSAP for guaranteed smooth scrolling across all browsers/devices
     gsap.to(window, {
-      duration: 1.2,
+      duration: 1,
       scrollTo: { y: offsetPosition, autoKill: false },
       ease: "power3.inOut"
     });
